@@ -1,8 +1,8 @@
 require 'menu'
 require 'dish'
 
-describe Menu do
-  context "#add_dish" do
+describe "Menu integration" do
+  context "#add_dish and #list" do
     it "adds a dish to the menu" do
       menu = Menu.new
       dish = Dish.new("pad thai", 7.50)

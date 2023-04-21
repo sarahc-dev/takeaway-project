@@ -257,3 +257,4 @@ When I began writing my tests I then decided to create separate classes for Menu
 
 Questions:
 When mocking - should you add a fail case where a method is not passed a class instance when it should be? eg. add_dish(dish)
+MenuFormatter integration test - is this a correct way to test the output?
