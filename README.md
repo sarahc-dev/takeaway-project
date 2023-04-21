@@ -31,7 +31,7 @@ These are the user stories:
 #### Outline
 
 - Dish class - will initialize with a name of dish and price. It will have two methods to return the name and the price.
-- Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have two methods - to add dishes to the menu and to check if a Dish is on the menu.
+- Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have three methods - to list the menu items, add dishes to the menu and to check if a Dish is on the menu.
 - MenuFormatter class - will initialize with a Menu instance and have one method to format the menu.
 - Order class - it will initialize with a Menu instance, an empty order array and a total. It will have one method - which will allow the user to order some number of dishes and it will check the dish is on the menu, add it to the order and calculate the total order price.
 - ReceiptFormatter - will initialize with an Order instance and have one method to return a formatted receipt with order details and total.
@@ -58,12 +58,12 @@ class Menu
         # initialize with an empty menu_items array
     end
 
-    def add_dish(dish) # dish is a Dish instance
-        # adds dish to the menu
+    def list
+        # returns menu_items
     end
 
-    def see_menu
-        # prints the menu items including name and price
+    def add_dish(dish) # dish is a Dish instance
+        # adds dish to the menu
     end
 
     def on_menu?(dish) # dish is a Dish instance
@@ -115,18 +115,21 @@ end
 # => So that I can check if I want to order something
 # => I would like to see a list of dishes with prices.
 
-# 1 - add dish and confirm it's on menu
+# 1 - adds a dish to the menu
 menu = Menu.new
-item_1 = Dish.new("Pad Thai", 7.50)
-menu.add_dish(item_1)
-expect(menu.on_menu?(item_1)).to eq true
+dish = Dish.new("pad thai", 7.50)
+menu.add_dish(dish)
+expect(menu.list).to eq [dish]
 
-# 2 - return false if dish not on menu
+# 2 - adds multiple dishes to the menu
 menu = Menu.new
-item_1 = Dish.new("Pad Thai", 7.50)
-item_2 = Dish.new("Green Curry", 7.50)
-menu.add_dish(item_1)
-expect(menu.on_menu?(item_2)).to eq false
+dish_1 = Dish.new("pad thai", 7)
+dish_2 = Dish.new("green curry", 8.5)
+dish_3 = Dish.new("red curry", 8.75)
+menu.add_dish(dish_1)
+menu.add_dish(dish_2)
+menu.add_dish(dish_3)
+expect(menu.list).to eq [dish_1, dish_2, dish_3]
 
 # 3 - see menu with dishes and prices
 menu = Menu.new
@@ -142,6 +145,13 @@ menu_formatter = MenuFormatter.new(menu)
 # => As a customer
 # => So that I can order the meal I want
 # => I would like to be able to select some number of several available dishes.
+
+#  - return false if dish not on menu
+menu = Menu.new
+item_1 = Dish.new("Pad Thai", 7.50)
+item_2 = Dish.new("Green Curry", 7.50)
+menu.add_dish(item_1)
+expect(menu.on_menu?(item_2)).to eq false
 
 
 # => As a customer
@@ -203,7 +213,7 @@ expect { menu.add_dish("dish") }.to raise_error "dish should be an instance of D
 menu = Menu.new
 dish = double(:dish)
 menu.add_dish(dish)
-expect(menu.on_menu?(item_1)).to eq true
+expect(menu.on_menu?(dish)).to eq true
 
 # return false if dish not on menu
 menu = Menu.new
@@ -244,3 +254,6 @@ This was my initial class design:
 ![class design](./class-design.png)
 
 When I began writing my tests I then decided to create separate classes for MenuFormatter and ReceiptFormatter.
+
+Questions:
+When mocking - should you add a fail case where a method is not passed a class instance when it should be? eg. add_dish(dish)
