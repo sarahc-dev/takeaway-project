@@ -182,7 +182,7 @@ expect(order.items_in_order).to eq [dish_1, dish_1, dish_2, dish_2, dish_2, dish
 # => So that I can verify that my order is correct
 # => I would like to see an itemised receipt with a grand total.
 
-# 2 add items to order and print receipt
+# 4 add items to order and print receipt
 menu = Menu.new
 item_1 = Dish.new("Pad Thai", 7.50)
 item_2 = Dish.new("Red Curry", 8.50)
