@@ -31,9 +31,9 @@ These are the user stories:
 #### Outline
 
 - Dish class - will initialize with a name of dish and price. It will have two methods to return the name and the price.
-- Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have three methods - to list the menu items, add dishes to the menu and to check if a Dish is on the menu.
+- Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have three methods - add dishes to the menu (checks if a Dish is on the menu), list the items in the order and calculate the total cost.
 - MenuFormatter class - will initialize with a Menu instance and have one method to format the menu.
-- Order class - it will initialize with a Menu instance, an empty order array and a total. It will have one method - which will allow the user to order some number of dishes and it will check the dish is on the menu, add it to the order and calculate the total order price.
+- Order class - it will initialize with a Menu instance and an empty order array. It will have three methods - which will allow the user to order some number of dishes and it will check the dish is on the menu, add it to the order and calculate the total order price.
 - ReceiptFormatter - will initialize with an Order instance and have one method to return a formatted receipt with order details and total.
 - ConfirmOrder class - will utilise Twilio to send a text to confirm an order has been made. Based on the user story, the text contents does not contain the order details - so I have chosen not to initialize this with an Order class instance.
 
@@ -85,10 +85,18 @@ class Order
         # initialize with an empty order array and total
     end
 
-    def order(dish, amount) # dish is a Dish instance, amount is an integer.
+    def add(dish, amount) # dish is a Dish instance, amount is an integer.
         # Check if dish is on menu
         # Adds dish to array amount number of times.
         # Update total
+    end
+
+    def items_in_order
+        # returns order
+    end
+
+    def total
+        # calculates total cost of order
     end
 end
 
@@ -115,13 +123,12 @@ end
 # => So that I can check if I want to order something
 # => I would like to see a list of dishes with prices.
 
-# 1 - adds a dish to the menu
+# 1 - adds a dishes to the menu
 menu = Menu.new
 dish = Dish.new("pad thai", 7.50)
 menu.add_dish(dish)
 expect(menu.list).to eq [dish]
 
-# 2 - adds multiple dishes to the menu
 menu = Menu.new
 dish_1 = Dish.new("pad thai", 7)
 dish_2 = Dish.new("green curry", 8.5)
@@ -131,7 +138,7 @@ menu.add_dish(dish_2)
 menu.add_dish(dish_3)
 expect(menu.list).to eq [dish_1, dish_2, dish_3]
 
-# 3 - see menu with dishes and prices
+# 2 - see menu with dishes and prices
 menu = Menu.new
 item_1 = Dish.new("Pad Thai", 7.50)
 item_2 = Dish.new("Red Curry", 8.50)
@@ -139,8 +146,8 @@ item_2 = Dish.new("Green Curry", 8.50)
 menu.add_dish(item_1)
 menu.add_dish(item_2)
 menu.add_dish(item_3)
-menu_formatter = MenuFormatter.new(menu)
-# Expect formatted menu
+menu_formatter = MenuFormatter.new(Kernel, menu)
+menu_formatter.format => "Pad Thai: £7.50\n"
 
 # => As a customer
 # => So that I can order the meal I want
@@ -221,18 +228,16 @@ dish = double(:dish)
 expect(menu.on_menu?(dish)).to eq false
 
 # MenuFormatter class
-# fails if menu is not a Menu instance
-expect { MenuFormatter.new("menu") }.to raise_error "menu should be an instance of Menu"
-
-# formats the menu
-# ... create menu
+# 2 - see menu with dishes and prices
 io = double :io
-# ... create result
-expect(io).to receive(:puts).with("")
-menu_formatter = MenuFormatter.new(io)
+fake_dish = double(:fake_dish, name: "pad thai", price: 7.5)
+menu = double(:menu, list: [fake_dish])
+expect(io).to receive(:puts).with("Pad Thai: £7.50")
+
+menu_formatter = MenuFormatter.new(io, menu)
 menu_formatter.format
 
-# Order class"
+# Order class
 # fails if menu is not a Menu instance
 expect { Order.new("menu") }.to raise_error "menu should be an instance of Menu"
 
