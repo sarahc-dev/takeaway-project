@@ -55,6 +55,12 @@ describe Order do
   end
 
   context "#total" do
+    it "returns 0 if nothing in the order" do
+      fake_menu = double :menu
+      order = Order.new(fake_menu)
+      expect(order.total).to eq 0
+    end
+
     it "returns the total cost of the order" do
       fake_dish = double(:dish, name: "pad thai", price: 8)
       fake_menu = double(:menu, list: [fake_dish])

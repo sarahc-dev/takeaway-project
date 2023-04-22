@@ -21,19 +21,4 @@ describe "Menu integration" do
       expect(menu.list).to eq [dish_1, dish_2, dish_3]
     end
   end
-
-  context "#on_menu?" do
-    it "confirms a dish is on the menu" do
-      menu = Menu.new
-      dish = Dish.new("pad thai", 7.50)
-      menu.add_dish(dish)
-      expect(menu.on_menu?(dish)).to eq true
-    end
-
-    it "returns false if dish is not on the menu" do
-      menu = Menu.new
-      dish = Dish.new("pad thai", 7)
-      expect(menu.on_menu?(dish)).to eq false
-    end
-  end
 end

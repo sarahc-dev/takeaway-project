@@ -33,7 +33,7 @@ These are the user stories:
 - Dish class - will initialize with a name of dish and price. It will have two methods to return the name and the price.
 - Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have two methods - add dishes to the menu and list the items on the menu.
 - MenuFormatter class - will initialize with a Menu instance and have one method to format the menu.
-- Order class - it will initialize with a Menu instance and an empty order array. It will have three methods - which will allow the user to order some number of dishes and it will check the dish is on the menu, add it to the order and calculate the total order price.
+- Order class - it will initialize with a Menu instance and an empty order array. It will have three methods - allow the user to order some number of dishes (will check the dish is on the menu) and add it to the order array. It will also return the order array and calculate the total order price.
 - ReceiptFormatter - will initialize with an Order instance and have one method to return a formatted receipt with order details and total.
 - ConfirmOrder class - will utilise Twilio to send a text to confirm an order has been made. Based on the user story, the text contents does not contain the order details - so I have chosen not to initialize this with an Order class instance.
 
@@ -190,22 +190,11 @@ item_2 = Dish.new("Green Curry", 8.50)
 menu.add_dish(item_1)
 menu.add_dish(item_2)
 menu.add_dish(item_3)
-takeaway = Takeaway.new(menu)
-takeaway.order(item_2, 1)
-takeaway.order(item_3, 3)
-expect(takeaway.print_receipt).to eq # formatted receipt
-
-
-# 3 - raise error if selected dish not on menu
-menu = Menu.new
-item_1 = Dish.new("Pad Thai", 7.50)
-item_2 = Dish.new("Red Curry", 8.50)
-menu.add_dish(item_1)
-menu.add_dish(item_2)
-takeaway = Takeaway.new
-
-
-
+order = Order.new(menu)
+order.add(item_2, 1)
+order.add(item_3, 3)
+receipt_formatter = ReceiptFormatter.new(Kernel, order)
+receipt_formatter.format => "1 x Red Curry: £8.50\n3 x Green Curry: £25.50\nTotal: £34.00"
 
 # => As a customer
 # => So that I am reassured that my order will be delivered on time

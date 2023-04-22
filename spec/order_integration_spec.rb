@@ -2,7 +2,7 @@ require 'order'
 require 'menu'
 require 'dish'
 
-describe Order do
+describe "Order integration" do
   context "#items_in_order" do
     it "initially has an empty list in the order" do
       menu = Menu.new
@@ -63,6 +63,12 @@ describe Order do
   end
 
   context "#total" do
+    it "returns 0 if nothing in the order" do
+      menu = Menu.new
+      order = Order.new(menu)
+      expect(order.total).to eq 0
+    end
+
     it "returns the total cost of the order" do
       dish = Dish.new("pad thai", 8)
       menu = Menu.new

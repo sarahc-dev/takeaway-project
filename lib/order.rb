@@ -11,10 +11,10 @@ class Order
   end
 
   def items_in_order
-      @order
+    @order
   end
 
   def total
-      @order.map { |item| item.price }.sum
+    @order.map { |item| item.price }.sum
   end
 end
