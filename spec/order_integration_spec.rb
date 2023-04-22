@@ -30,6 +30,21 @@ describe Order do
       expect(order.items_in_order).to eq [dish, dish, dish]
     end
 
+    it "adds multiple items to the order" do
+      dish_1 = Dish.new("pad thai", 8)
+      dish_2 = Dish.new("green curry", 8.5)
+      dish_3 = Dish.new("jasmine rice", 3.25)
+      menu = Menu.new
+      menu.add_dish(dish_1)
+      menu.add_dish(dish_2)
+      menu.add_dish(dish_3)
+      order = Order.new(menu)
+      order.add(dish_1, 2)
+      order.add(dish_2, 3)
+      order.add(dish_3, 2)
+      expect(order.items_in_order).to eq [dish_1, dish_1, dish_2, dish_2, dish_2, dish_3, dish_3]
+    end
+
     it "fails if amount is not a number" do
       dish = Dish.new("pad thai", 8)
       menu = Menu.new

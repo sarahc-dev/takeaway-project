@@ -31,7 +31,7 @@ These are the user stories:
 #### Outline
 
 - Dish class - will initialize with a name of dish and price. It will have two methods to return the name and the price.
-- Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have three methods - add dishes to the menu (checks if a Dish is on the menu), list the items in the order and calculate the total cost.
+- Menu class - will initialize with an empty array which will hold a list of Dish instances. It will have two methods - add dishes to the menu and list the items on the menu.
 - MenuFormatter class - will initialize with a Menu instance and have one method to format the menu.
 - Order class - it will initialize with a Menu instance and an empty order array. It will have three methods - which will allow the user to order some number of dishes and it will check the dish is on the menu, add it to the order and calculate the total order price.
 - ReceiptFormatter - will initialize with an Order instance and have one method to return a formatted receipt with order details and total.
@@ -64,10 +64,6 @@ class Menu
 
     def add_dish(dish) # dish is a Dish instance
         # adds dish to the menu
-    end
-
-    def on_menu?(dish) # dish is a Dish instance
-        # returns boolean
     end
 end
 
@@ -153,13 +149,34 @@ menu_formatter.format => "Pad Thai: £7.50\n"
 # => So that I can order the meal I want
 # => I would like to be able to select some number of several available dishes.
 
-#  - return false if dish not on menu
+# 3 "adds items to the order"
+dish = Dish.new("pad thai", 8)
 menu = Menu.new
-item_1 = Dish.new("Pad Thai", 7.50)
-item_2 = Dish.new("Green Curry", 7.50)
-menu.add_dish(item_1)
-expect(menu.on_menu?(item_2)).to eq false
+menu.add_dish(dish)
+order = Order.new(menu)
+order.add(dish, 1)
+expect(order.items_in_order).to eq [dish]
 
+dish = Dish.new("pad thai", 8)
+menu = Menu.new
+menu.add_dish(dish)
+order = Order.new(menu)
+order.add(dish, 3)
+expect(order.items_in_order).to eq [dish, dish, dish]
+
+# "adds multiple items to the order"
+dish_1 = Dish.new("pad thai", 8)
+dish_2 = Dish.new("green curry", 8.5)
+dish_3 = Dish.new("jasmine rice", 3.25)
+menu = Menu.new
+menu.add_dish(dish_1)
+menu.add_dish(dish_2)
+menu.add_dish(dish_3)
+order = Order.new(menu)
+order.add(dish_1, 2)
+order.add(dish_2, 3)
+order.add(dish_3, 2)
+expect(order.items_in_order).to eq [dish_1, dish_1, dish_2, dish_2, dish_2, dish_3, dish_3]
 
 # => As a customer
 # => So that I can verify that my order is correct

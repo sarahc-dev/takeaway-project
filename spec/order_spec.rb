@@ -26,6 +26,18 @@ describe Order do
       expect(order.items_in_order).to eq [fake_dish, fake_dish, fake_dish]
     end
 
+    it "adds multiple items to the order" do
+      dish_1 = double :dish
+      dish_2 = double :dish
+      dish_3 = double :dish
+      fake_menu = double(:menu, list: [dish_1, dish_2, dish_3])
+      order = Order.new(fake_menu)
+      order.add(dish_1, 2)
+      order.add(dish_2, 3)
+      order.add(dish_3, 2)
+      expect(order.items_in_order).to eq [dish_1, dish_1, dish_2, dish_2, dish_2, dish_3, dish_3]
+    end
+
     it "fails if amount is not a number" do
       fake_dish = double :dish
       fake_menu = double :menu
