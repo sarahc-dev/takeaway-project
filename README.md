@@ -4,6 +4,12 @@ Golden square phase 4 - solo project.
 
 This project creates a takeaway where a user can see a menu, order items and get a receipt for their order. It also utilises Twilio to send a text message confirmation of order.
 
+To use this program, create a local .env file with the following variables:
+
+    ACCOUNT_SID=abc
+    AUTH_TOKEN=123
+    MY_NUMBER=+44
+
 ## Design
 
 ### 1. Describe the Problem
@@ -84,7 +90,6 @@ class Order
     def add(dish, amount) # dish is a Dish instance, amount is an integer.
         # Check if dish is on menu
         # Adds dish to array amount number of times.
-        # Update total
     end
 
     def items_in_order
@@ -183,18 +188,19 @@ expect(order.items_in_order).to eq [dish_1, dish_1, dish_2, dish_2, dish_2, dish
 # => I would like to see an itemised receipt with a grand total.
 
 # 4 add items to order and print receipt
+dish_1 = Dish.new("pad thai", 7.5)
+dish_2 = Dish.new("green curry", 8)
+dish_3 = Dish.new("rice", 3.5)
 menu = Menu.new
-item_1 = Dish.new("Pad Thai", 7.50)
-item_2 = Dish.new("Red Curry", 8.50)
-item_2 = Dish.new("Green Curry", 8.50)
-menu.add_dish(item_1)
-menu.add_dish(item_2)
-menu.add_dish(item_3)
+menu.add_dish(dish_1)
+menu.add_dish(dish_2)
+menu.add_dish(dish_3)
 order = Order.new(menu)
-order.add(item_2, 1)
-order.add(item_3, 3)
+order.add(dish_1, 2)
+order.add(dish_2, 1)
+order.add(dish_3, 2)
 receipt_formatter = ReceiptFormatter.new(Kernel, order)
-receipt_formatter.format => "1 x Red Curry: £8.50\n3 x Green Curry: £25.50\nTotal: £34.00"
+expect { receipt_formatter.format }.to output("2 Pad Thai @ £15.00\n1 Green Curry @ £8.00\n2 Rice @ £7.00\nTotal: £30.00\n").to_stdout
 
 # => As a customer
 # => So that I am reassured that my order will be delivered on time
@@ -239,7 +245,6 @@ io = double :io
 fake_dish = double(:fake_dish, name: "pad thai", price: 7.5)
 menu = double(:menu, list: [fake_dish])
 expect(io).to receive(:puts).with("Pad Thai: £7.50")
-
 menu_formatter = MenuFormatter.new(io, menu)
 menu_formatter.format
 
@@ -264,8 +269,9 @@ This was my initial class design:
 
 ![class design](./class-design.png)
 
-When I began writing my tests I then decided to create separate classes for MenuFormatter and ReceiptFormatter.
+When I began writing my tests I then decided to create separate classes for MenuFormatter and ReceiptFormatter to maintain single responsibilities.
 
 Questions:
-When mocking - should you add a fail case where a method is not passed a class instance when it should be? eg. add_dish(dish)
-MenuFormatter integration test - is this a correct way to test the output?
+
+- When mocking - should you add a fail case where a method is not passed a class instance when it should be? eg. add_dish(dish)
+- MenuFormatter integration test - is this a correct way to test the output?
