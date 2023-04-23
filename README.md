@@ -217,7 +217,7 @@ expect { receipt_formatter.format }.to output("2 Pad Thai @ £1500\n1 Green Curr
 
 After each test you write, follow the test-driving process of red, green, refactor to implement the behaviour.
 
-### 5. Process
+### 6. Process
 
 This was my initial class design:
 
@@ -227,7 +227,7 @@ When I began writing my tests I then decided to create separate classes for Menu
 
 Todo next: initialize ConfirmOrder with an order and have a dynamic text contents.
 
-Questions:
+### 7. Questions
 
 - When mocking - should you add a fail case where a method is not passed a class instance when it should be? eg. add_dish(dish)
 - Should integration tests be separate or all in one file?
