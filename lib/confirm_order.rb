@@ -7,20 +7,24 @@ class ConfirmOrder
   end
 
   def send_text
-    account_sid = ENV['ACCOUNT_SID']
-    auth_token = ENV['AUTH_TOKEN']
-    client = @client.new(account_sid, auth_token)
+    # account_sid = ENV['ACCOUNT_SID']
+    # auth_token = ENV['AUTH_TOKEN']
+    # client = @client.new(account_sid, auth_token)
     
-    from = '+447360269043' # Your Twilio number
+    from = ENV['TWILIO_NUMBER'] # Your Twilio number
     to = ENV['MY_NUMBER'] # Your mobile phone number
     
-    client.messages.create(
+    message = @client.messages.create(
     from: from,
     to: to,
     body: "Thank you! Your order was placed and will be delivered before 18:52"
     )
+    # puts message.sid
   end
 end
 
-text = ConfirmOrder.new(Twilio::REST::Client)
-text.send_text
+# to use
+# text = ConfirmOrder.new(Twilio::REST::Client.new(ENV['ACCOUNT_SID'], ENV['AUTH_TOKEN']))
+# text.send_text
+
+
